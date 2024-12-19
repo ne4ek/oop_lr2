@@ -48,3 +48,15 @@ def checkLimits(entity):
         entity.y = SNAKE_SIZE
     if entity.y < 0:
         entity.y = SCREEN_HEIGHT - SNAKE_SIZE
+
+class Apple:
+    def __init__(self, x, y, state):
+        self.x = x
+        self.y = y
+        self.state = state
+        self.color = pygame.color.Color("red")
+
+    def draw(self, screen):
+        pygame.draw.rect(
+            screen, self.color, (self.x, self.y, APPLE_SIZE, APPLE_SIZE), 0
+        )
