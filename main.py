@@ -26,3 +26,25 @@ background_color = pygame.Color(74, 74, 74)
 black = pygame.Color(0, 0, 0)
 
 gameClock = pygame.time.Clock()
+
+
+def checkCollision(posA, As, posB, Bs):
+    if (
+        posA.x < posB.x + Bs
+        and posA.x + As > posB.x
+        and posA.y < posB.y + Bs
+        and posA.y + As > posB.y
+    ):
+        return True
+    return False
+
+
+def checkLimits(entity):
+    if entity.x > SCREEN_WIDTH:
+        entity.x = SNAKE_SIZE
+    if entity.x < 0:
+        entity.x = SCREEN_WIDTH - SNAKE_SIZE
+    if entity.y > SCREEN_HEIGHT:
+        entity.y = SNAKE_SIZE
+    if entity.y < 0:
+        entity.y = SCREEN_HEIGHT - SNAKE_SIZE
