@@ -67,3 +67,42 @@ class Segment:
         self.y = y
         self.direction = KEY["UP"]
         self.color = "white"
+        
+class Snake:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.direction = KEY["UP"]
+        self.stack = []
+
+        self.stack.append(self)
+
+        blackBox = Segment(self.x, self.y + SEPARATION)
+        blackBox.direction = KEY["UP"]
+        blackBox.color = "NULL"
+        self.stack.append(blackBox)
+
+    def move(self):
+        last_element = len(self.stack) - 1
+        while last_element != 0:
+            self.stack[last_element].direction = self.stack[last_element - 1].direction
+            self.stack[last_element].x = self.stack[last_element - 1].x
+            self.stack[last_element].y = self.stack[last_element - 1].y
+            last_element -= 1
+        if len(self.stack) < 2:
+            last_segment = self
+        else:
+            last_segment = self.stack.pop(last_element)
+        last_segment.direction = self.stack[0].direction
+        if self.stack[0].direction == KEY["UP"]:
+            last_segment.y = self.stack[0].y - (SPEED * FPS)
+        elif self.stack[0].direction == KEY["DOWN"]:
+            last_segment.y = self.stack[0].y + (SPEED * FPS)
+        elif self.stack[0].direction == KEY["LEFT"]:
+            last_segment.x = self.stack[0].x - (SPEED * FPS)
+        elif self.stack[0].direction == KEY["RIGHT"]:
+            last_segment.x = self.stack[0].x + (SPEED * FPS)
+        self.stack.insert(0, last_segment)
+
+    def getHead(self):
+        return self.stack[0]
