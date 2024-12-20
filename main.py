@@ -272,4 +272,44 @@ def respawnApples(apples, quantity, sx, sy):
                 continue
         apples.append(Apple(x, y, 1))
         angle = 999
-        counter += 1      
+        counter += 1
+def endGame():
+    message = game_over_font.render("Game Over", 1, pygame.Color("white"))
+    message_play_again = play_again_font.render(
+        "Play Again? Y/N", 1, pygame.Color("green")
+    )
+    screen.blit(message, (320, 240))
+    screen.blit(message_play_again, (320 + 12, 240 + 40))
+
+    pygame.display.flip()
+    pygame.display.update()
+
+    myKey = getKey()
+    while myKey != "exit":
+        if myKey == "yes":
+            main()
+        elif myKey == "no":
+            break
+        myKey = getKey()
+        gameClock.tick(FPS)
+    sys.exit()
+
+
+def drawScore(score):
+    score_numb = score_numb_font.render(str(score), 1, pygame.Color("red"))
+    screen.blit(score_msg, (SCREEN_WIDTH - score_msg_size[0] - 60, 10))
+    screen.blit(score_numb, (SCREEN_WIDTH - 45, 14))
+
+
+def drawGameTime(gameTime):
+    game_time = score_font.render("Time:", 1, pygame.Color("green"))
+    game_time_numb = score_numb_font.render(
+        str(gameTime / 1000), 1, pygame.Color("red")
+    )
+    screen.blit(game_time, (30, 10))
+    screen.blit(game_time_numb, (105, 14))
+
+
+def exitScreen():
+    pass
+      
