@@ -204,3 +204,72 @@ class Snake:
                 0,
             )
             counter += 1
+def getKey():
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                return KEY["UP"]
+            elif event.key == pygame.K_DOWN:
+                return KEY["DOWN"]
+            elif event.key == pygame.K_LEFT:
+                return KEY["LEFT"]
+            elif event.key == pygame.K_RIGHT:
+                return KEY["RIGHT"]
+            elif event.key == pygame.K_ESCAPE:
+                return "exit"
+            elif event.key == pygame.K_y:
+                return "yes"
+            elif event.key == pygame.K_n:
+                return "no"
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+
+def respawnApple(apples, index, sx, sy):
+    radius = (
+        math.sqrt(
+            (
+                SCREEN_WIDTH / 2 * SCREEN_WIDTH / 2
+                + SCREEN_HEIGHT / 2 * SCREEN_HEIGHT / 2
+            )
+        )
+        / 2
+    )
+    angle = 999
+    while angle > radius:
+        angle = random.uniform(0, 800) * math.pi * 2
+        x = SCREEN_WIDTH / 2 + radius * math.cos(angle)
+        y = SCREEN_HEIGHT / 2 + radius * math.sin(angle)
+        if x == sx and y == sy:
+            continue
+    newApple = Apple(x, y, 1)
+    apples[index] = newApple
+
+
+def respawnApples(apples, quantity, sx, sy):
+    counter = 0
+    del apples[:]
+    radius = (
+        math.sqrt(
+            (
+                SCREEN_WIDTH / 2 * SCREEN_WIDTH / 2
+                + SCREEN_HEIGHT / 2 * SCREEN_HEIGHT / 2
+            )
+        )
+        / 2
+    )
+    angle = 999
+    while counter < quantity:
+        while angle > radius:
+            angle = random.uniform(0, 800) * math.pi * 2
+            x = SCREEN_WIDTH / 2 + radius * math.cos(angle)
+            y = SCREEN_HEIGHT / 2 + radius * math.sin(angle)
+            if (
+                (x - APPLE_SIZE == sx or x + APPLE_SIZE == sx)
+                and (y - APPLE_SIZE == sy or y + APPLE_SIZE == sy)
+                or radius - angle <= 10
+            ):
+                continue
+        apples.append(Apple(x, y, 1))
+        angle = 999
+        counter += 1      
