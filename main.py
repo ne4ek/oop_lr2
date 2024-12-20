@@ -106,3 +106,101 @@ class Snake:
 
     def getHead(self):
         return self.stack[0]
+    
+    def grow(self):
+        last_element = len(self.stack) - 1
+        self.stack[last_element].direction = self.stack[last_element].direction
+        if self.stack[last_element].direction == KEY["UP"]:
+            newSegment = Segment(
+                self.stack[last_element].x, self.stack[last_element].y - SNAKE_SIZE
+            )
+            blackBox = Segment(newSegment.x, newSegment.y - SEPARATION)
+
+        elif self.stack[last_element].direction == KEY["DOWN"]:
+            newSegment = Segment(
+                self.stack[last_element].x, self.stack[last_element].y + SNAKE_SIZE
+            )
+            blackBox = Segment(newSegment.x, newSegment.y + SEPARATION)
+
+        elif self.stack[last_element].direction == KEY["LEFT"]:
+            newSegment = Segment(
+                self.stack[last_element].x - SNAKE_SIZE, self.stack[last_element].y
+            )
+            blackBox = Segment(newSegment.x - SEPARATION, newSegment.y)
+
+        elif self.stack[last_element].direction == KEY["RIGHT"]:
+            newSegment = Segment(
+                self.stack[last_element].x + SNAKE_SIZE, self.stack[last_element].y
+            )
+            blackBox = Segment(newSegment.x + SEPARATION, newSegment.y)
+
+        blackBox.color = "NULL"
+        self.stack.append(newSegment)
+        self.stack.append(blackBox)
+
+    def setDirection(self, direction):
+        if (
+            self.direction == KEY["RIGHT"]
+            and direction == KEY["LEFT"]
+            or self.direction == KEY["LEFT"]
+            and direction == KEY["RIGHT"]
+        ):
+            pass
+        elif (
+            self.direction == KEY["UP"]
+            and direction == KEY["DOWN"]
+            or self.direction == KEY["DOWN"]
+            and direction == KEY["UP"]
+        ):
+            pass
+        else:
+            self.direction = direction
+
+    def get_rect(self):
+        rect = (self.x, self.y)
+        return rect
+
+    def get_x(self):
+        return self.x
+
+    def get_y(self):
+        return self.y
+
+    def set_x(self, x):
+        self.x = x
+
+    def set_y(self, y):
+        self.y = y
+
+    def checkCrash(self):
+        counter = 1
+        while counter < len(self.stack) - 1:
+            if (
+                checkCollision(
+                    self.stack[0], SNAKE_SIZE, self.stack[counter], SNAKE_SIZE
+                )
+                and self.stack[counter].color != "NULL"
+            ):
+                return True
+            counter += 1
+        return False
+
+    def draw(self, screen):
+        pygame.draw.rect(
+            screen,
+            pygame.color.Color("yellow"),
+            (self.stack[0].x, self.stack[0].y, SNAKE_SIZE, SNAKE_SIZE),
+            0,
+        )
+        counter = 1
+        while counter < len(self.stack):
+            if self.stack[counter].color == "NULL":
+                counter += 1
+                continue
+            pygame.draw.rect(
+                screen,
+                pygame.color.Color("white"),
+                (self.stack[counter].x, self.stack[counter].y, SNAKE_SIZE, SNAKE_SIZE),
+                0,
+            )
+            counter += 1
